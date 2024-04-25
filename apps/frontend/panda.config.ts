@@ -12,7 +12,14 @@ export default defineConfig({
 
   // Useful for theme customization
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        out: {
+          '0%': { top: '0' },
+          '100%': { top: '-100vh' },
+        },
+      },
+    },
   },
 
   jsxFramework: 'react',

@@ -12,11 +12,15 @@
     "prepare": "panda codegen"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.29.2",
+    "@tanstack/react-query-devtools": "^5.29.2",
+    "animate.css": "^4.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@pandacss/dev": "^0.36.1",
+    "@tanstack/eslint-plugin-query": "^5.28.11",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
