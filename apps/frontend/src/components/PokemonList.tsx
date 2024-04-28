@@ -1,5 +1,6 @@
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useState } from 'react';
 import { css, cx } from '../../styled-system/css';
 import { Center } from '../../styled-system/jsx';
 
@@ -37,6 +38,27 @@ const typeColors: { [key: string]: string } = {
 };
 
 function PokemonList({ allPokemons }: pokemonListsProps) {
+  const [maxIndex, setMaxIndex] = useState(30);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const isBottom =
+        window.innerHeight + document.documentElement.scrollTop ===
+        document.documentElement.offsetHeight;
+
+      if (isBottom && maxIndex <= allPokemons.length) {
+        setMaxIndex(maxIndex + 30);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [maxIndex, allPokemons]);
+
   const searchBar = css({
     display: 'flex',
     flexDirection: 'row',
@@ -88,12 +110,15 @@ function PokemonList({ allPokemons }: pokemonListsProps) {
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
+        h: '100%',
+        w: '100%',
       })}
     >
       <div className={searchBar}>
         <input
           placeholder="Search your Pokemon"
           type="text"
+          onChange={(e) => setSearch(e.currentTarget.value)}
           className={css({
             border: 'none',
             outline: 'none',
@@ -128,65 +153,70 @@ function PokemonList({ allPokemons }: pokemonListsProps) {
           justifyContent: 'center',
         })}
       >
-        {allPokemons.map((value: pokemon) => {
-          return (
-            <div key={value.id} className={concatPokemonDiv}>
-              <img
-                className={css({
-                  _groupHover: { transform: 'scale(1.15)' },
-                  position: 'absolute',
-                  top: '-55',
-                })}
-                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${value.id}.png`}
-              />
-              <span
-                className={css({
-                  fontWeight: 'bold',
-                  fontSize: '12px',
-                  color: '#8f9396',
-                })}
-              >
-                N° {value.id}
-              </span>
-              <h3
-                className={css({
-                  color: '#011030',
-                  margin: '5px',
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                })}
-              >
-                {dressUpPayloadValue(value.name)}
-              </h3>
-              <div className={css({ display: 'flex', flexDirection: 'row' })}>
-                {value.types.map((type, index) => {
-                  const monStyle = {
-                    background: typeColors[type],
-                  };
+        {allPokemons
+          .filter((value: pokemon) =>
+            dressUpPayloadValue(value.name).toLowerCase().includes(search),
+          )
+          .slice(0, maxIndex)
+          .map((value: pokemon) => {
+            return (
+              <div key={value.id} className={concatPokemonDiv}>
+                <img
+                  className={css({
+                    _groupHover: { transform: 'scale(1.15)' },
+                    position: 'absolute',
+                    top: '-55',
+                  })}
+                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${value.id}.png`}
+                />
+                <span
+                  className={css({
+                    fontWeight: 'bold',
+                    fontSize: '12px',
+                    color: '#8f9396',
+                  })}
+                >
+                  N° {value.id}
+                </span>
+                <h3
+                  className={css({
+                    color: '#011030',
+                    margin: '5px',
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                  })}
+                >
+                  {dressUpPayloadValue(value.name)}
+                </h3>
+                <div className={css({ display: 'flex', flexDirection: 'row' })}>
+                  {value.types.map((type, index) => {
+                    const monStyle = {
+                      background: typeColors[type],
+                    };
 
-                  return (
-                    <div
-                      className={css({
-                        rounded: '5px',
-                        p: '3px 7px',
-                        color: 'black',
-                        m: '5px',
-                        mt: '10px',
-                        fontWeight: '600',
-                        fontSize: '14px',
-                        opacity: '0.8',
-                      })}
-                      style={monStyle}
-                      key={index}
-                    >
-                      {dressUpPayloadValue(value.types[index])}
-                    </div>
-                  );
-                })}
+                    return (
+                      <div
+                        className={css({
+                          rounded: '5px',
+                          p: '3px 7px',
+                          color: 'black',
+                          m: '5px',
+                          mt: '10px',
+                          fontWeight: '600',
+                          fontSize: '14px',
+                          opacity: '0.8',
+                        })}
+                        style={monStyle}
+                        key={index}
+                      >
+                        {dressUpPayloadValue(value.types[index])}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     </div>
   );
