@@ -18,7 +18,7 @@ function Loading() {
   );
 
   const loadingOut = css({
-    animation: 'out ease-in-out 0.5s forwards',
+    animation: 'loadingOut ease-in-out 0.5s forwards',
   });
 
   const div = css({

@@ -14,7 +14,7 @@ export default defineConfig({
   theme: {
     extend: {
       keyframes: {
-        out: {
+        loadingOut: {
           '0%': { top: '0' },
           '100%': { top: '-100vh' },
         },

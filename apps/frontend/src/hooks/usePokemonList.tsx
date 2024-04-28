@@ -13,7 +13,7 @@ export function usePokemonList() {
   const [allPokemons, setAllpokemons] = useState<pokemon[]>([]);
   const [loop, setLoop] = useState(true);
 
-  const { data, isLoading, isError, isSuccess } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['allPokemons'],
     queryFn: getAllPokemon,
   });
@@ -22,7 +22,6 @@ export function usePokemonList() {
     data: dataType,
     isLoading: TypeisLoading,
     isError: TypeisError,
-    isSuccess: TypeisSuccess,
   } = useQuery({
     queryKey: ['getAllPokemonTypes'],
     queryFn: getAllTypes,
@@ -31,7 +30,7 @@ export function usePokemonList() {
   useEffect(() => {
     const pokemons: pokemon[] = [];
 
-    if (!isLoading && !isError && isSuccess) {
+    if (!isLoading && !isError) {
       for (let i = 0; i < data.results.length; i++) {
         const id = Number(
           data.results[i].url
@@ -46,7 +45,7 @@ export function usePokemonList() {
           types: [],
         });
       }
-      if (dataType && !TypeisLoading && !TypeisError && TypeisSuccess) {
+      if (dataType && !TypeisLoading && !TypeisError) {
         for (let i = 0; i < dataType.length; i++) {
           const pokemonInTypes = dataType[i].pokemon;
 
@@ -67,21 +66,13 @@ export function usePokemonList() {
     }
 
     setAllpokemons(pokemons);
+
     const timer = setTimeout(() => {
       setLoop(false);
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [
-    data,
-    isLoading,
-    isError,
-    isSuccess,
-    dataType,
-    TypeisLoading,
-    TypeisError,
-    TypeisSuccess,
-  ]);
+  }, [data, isLoading, isError, dataType, TypeisLoading, TypeisError]);
 
   return { allPokemons, loop };
 }
