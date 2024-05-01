@@ -1,8 +1,7 @@
 import 'animate.css';
 import { css } from '../styled-system/css/css';
-// import './app.css';
+import './app.css';
 import Loading from './components/Loading.tsx';
-import PokemonContainer from './components/PokemonContainer.tsx';
 import PokemonList from './components/PokemonList.tsx';
 import { usePokemonList } from './hooks/usePokemonList.tsx';
 
@@ -18,8 +17,9 @@ function App() {
           p: '0 10vw',
           w: '100%',
           minH: '100vh',
-          fontFamily: 'Outfit, sans-serif',
+          fontFamily: '"Outfit"',
           display: 'flex',
+          flexDirection: 'row',
           justifyContent: 'center',
           backgroundImage: 'url(./assets/pokeball-icon.png)',
           backgroundRepeat: 'no-repeat',
@@ -28,7 +28,6 @@ function App() {
         })}
       >
         <PokemonList allPokemons={allPokemons} />
-        <PokemonContainer />
       </div>
     </>
   );

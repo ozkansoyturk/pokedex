@@ -25,6 +25,7 @@ function Loading() {
     h: '100%',
     position: 'absolute',
     bg: 'white',
+    zIndex: 999,
   });
 
   const loadingClass = cx(div, loading ? loadingOut : '');

@@ -31,6 +31,38 @@ export async function getAllTypes() {
   return jsonResponses;
 }
 
+export async function getPokemonInfo(id: number) {
+  const urlPokemon = 'https://pokeapi.co/api/v2/pokemon/' + id;
+  const urlSpecies = 'https://pokeapi.co/api/v2/pokemon-species/' + id;
+
+  const responsePokemon = await fetch(urlPokemon);
+  const responseSpecies = await fetch(urlSpecies);
+
+  const pokemon = await responsePokemon.json();
+  const species = await responseSpecies.json();
+
+  const responseEvolutions = await fetch(species.evolution_chain.url);
+  const evolution_chain = await responseEvolutions.json();
+  return [pokemon, species, evolution_chain];
+}
+
+export function dressUpPayloadValue(string: string) {
+  const splitStr = string.toLowerCase().split('-');
+  for (let i = 0; i < splitStr.length; i++) {
+    splitStr[i] =
+      splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+  }
+  return splitStr.join(' ');
+}
+
+export function getId(url: string) {
+  return Number(
+    url
+      .replace('https://pokeapi.co/api/v2/pokemon-species/', '')
+      .replace('/', ''),
+  );
+}
+
 // export async function getAllTypes(id: number) {
 //   const getAllTypes = await fetch('https://pokeapi.co/api/v2/type/' + id);
 

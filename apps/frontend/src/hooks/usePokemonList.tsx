@@ -1,16 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { getAllPokemon, getAllTypes } from '../apis/setup.ts';
-
-type pokemon = {
-  pokeId: number;
-  id: number;
-  name: string;
-  types: string[];
-};
+import { Pokemon } from '../types/pokemon.ts';
 
 export function usePokemonList() {
-  const [allPokemons, setAllpokemons] = useState<pokemon[]>([]);
+  const [allPokemons, setAllpokemons] = useState<Pokemon[]>([]);
   const [loop, setLoop] = useState(true);
 
   const { data, isLoading, isError } = useQuery({
@@ -28,7 +22,7 @@ export function usePokemonList() {
   });
 
   useEffect(() => {
-    const pokemons: pokemon[] = [];
+    const pokemons: Pokemon[] = [];
 
     if (!isLoading && !isError) {
       for (let i = 0; i < data.results.length; i++) {
@@ -81,13 +75,6 @@ export function usePokemonList() {
 // import { useQueries, useQuery } from '@tanstack/react-query';
 // import { useEffect, useState } from 'react';
 // import { getAllPokemon, getAllTypes } from '../apis/setup.ts';
-
-// type pokemon = {
-//   pokeId: number;
-//   id: number;
-//   name: string;
-//   types: string[];
-// };
 
 // export function usePokemonList() {
 //   const [allpokemons, setAllpokemons] = useState<pokemon[]>([]);

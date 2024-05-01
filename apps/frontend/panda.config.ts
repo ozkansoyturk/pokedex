@@ -13,10 +13,25 @@ export default defineConfig({
   // Useful for theme customization
   theme: {
     extend: {
+      breakpoints: {
+        sm: '640px',
+        md: '768px',
+        lg: '1100px',
+        xl: '1280px',
+        '2xl': '1536px',
+      },
       keyframes: {
         loadingOut: {
           '0%': { top: '0' },
           '100%': { top: '-100vh' },
+        },
+        slideIn: {
+          '0%': { right: '-400px' },
+          '100%': { right: 'calc(10vw - 20px)' },
+        },
+        slideOut: {
+          '0%': { right: 'calc(10vw - 20px)' },
+          '100%': { right: '-400px' },
         },
       },
     },
