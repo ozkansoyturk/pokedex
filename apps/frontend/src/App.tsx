@@ -42,6 +42,7 @@ function App() {
             marginBottom: 'auto',
             zIndex: '1',
             animation: 'rotatePokeBall ease-in-out 3s infinite',
+            hideBelow: 'lg',
           })}
           src={loadingPokeball}
           alt=""

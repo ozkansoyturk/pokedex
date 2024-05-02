@@ -5,7 +5,7 @@ import { css, cx } from '../../styled-system/css';
 import { Center } from '../../styled-system/jsx';
 import { dressUpPayloadValue } from '../apis/setup.ts';
 import { Pokemon, pokemonListsProps } from '../types/pokemon.ts';
-import PokemonContainer from './PokemonContainer.tsx';
+import PokemonInfo from './PokemonInfo.tsx';
 
 const typeColors: { [key: string]: string } = {
   normal: '#BCBCAC',
@@ -218,7 +218,7 @@ function PokemonList({ allPokemons }: pokemonListsProps) {
             })}
         </div>
       </div>
-      <PokemonContainer pokemonInfo={pokemonInfo} />
+      <PokemonInfo pokemonInfo={pokemonInfo} />
     </>
   );
 }

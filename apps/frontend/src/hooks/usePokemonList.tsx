@@ -22,6 +22,7 @@ export function usePokemonList() {
   });
 
   useEffect(() => {
+    if (allPokemons.length || !data || !dataType) return;
     const pokemons: Pokemon[] = [];
 
     if (!isLoading && !isError) {
@@ -66,7 +67,15 @@ export function usePokemonList() {
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [data, isLoading, isError, dataType, TypeisLoading, TypeisError]);
+  }, [
+    data,
+    isLoading,
+    isError,
+    dataType,
+    TypeisLoading,
+    TypeisError,
+    allPokemons,
+  ]);
 
   return { allPokemons, loop };
 }

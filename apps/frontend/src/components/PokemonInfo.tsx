@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { css, cx } from '../../styled-system/css';
+import { css, cx } from '../../styled-system/css/index';
+import { Center } from '../../styled-system/jsx/center';
 import { dressUpPayloadValue, getId, getPokemonInfo } from '../apis/setup.ts';
 import noPokemonSelected from '../assets/no-pokemon-selected-image.png';
 import {
@@ -10,7 +11,7 @@ import {
   Stats,
 } from '../types/pokemon.ts';
 
-function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
+function PokemonInfo({ pokemonInfo }: PokemonContainerProps) {
   const [selectedPokemon, setSelectedPokemon] = useState<number | null>(null);
 
   const { data, isLoading, isSuccess } = useQuery({
@@ -63,20 +64,15 @@ function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
   };
 
   const colorStat: { [key: string]: string } = {
-    hp: '#df2140',
-    attack: '#ff994d',
-    defense: '#eecd3d',
-    'special-attack': '#85ddff',
-    'special-defense': '#96da83',
-    speed: '#fb94a8',
+    HP: '#df2140',
+    ATK: '#ff994d',
+    DEF: '#eecd3d',
+    SpA: '#85ddff',
+    SpD: '#96da83',
+    SPD: '#fb94a8',
   };
 
-  const imageEvolutionStyle = css({
-    cursor: 'pointer',
-  });
-
   const containerImage = css({
-    h: '288px',
     position: 'absolute',
     right: '0',
     left: '0',
@@ -87,6 +83,7 @@ function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
     imageRendering: 'pixelated',
     maxW: '350px',
     maxH: '22vh',
+    h: '18vh',
   });
 
   const allDiv = css({
@@ -127,6 +124,48 @@ function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
 
   const loadingIn = cx(allDiv, isSuccess ? slideIn : '');
 
+  const abilityWH = css({
+    display: 'flex',
+    flexDirection: 'column',
+    w: '100%',
+    m: '5px',
+  });
+
+  const abilityWHbackground = css({
+    w: '100%',
+    bg: '#F6F8FC',
+    p: '8px 0',
+    rounded: '30px',
+    m: '5px',
+  });
+
+  const h4 = css({
+    fontWeight: 'bold',
+    m: '5px',
+    // mt: '15px',
+    color: '#011030',
+    textAlign: 'center',
+  });
+
+  const currentPokemonEvolutionImage = css({
+    h: '74px',
+    w: '74px',
+    cursor: 'pointer',
+    rounded: '30%',
+    _hover: { bg: 'rgba(0, 0, 0, 0.03)' },
+  });
+
+  const currentPokemonEvolutionLevelContainer = css({
+    width: '50px',
+    bg: '#F6F8FC',
+    padding: '8px 0',
+    rounded: '30px',
+    margin: '5px',
+    fontSize: '12px',
+    fontWeight: 'bold',
+  });
+  console.log('bonjour');
+
   return (
     <>
       {!isSuccess && (
@@ -165,7 +204,6 @@ function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
           {selectedPokemon >= 650 ? (
             <img
               className={containerImage}
-              id="current-pokemon-image"
               src={
                 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/' +
                 selectedPokemon +
@@ -254,70 +292,53 @@ function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
 
             {/*INFO: <!--description--> */}
 
-            <h4 className={css({ fontWeight: 'bold' })}>Pokedex Entry</h4>
+            <h4 className={h4}>Pokedex Entry</h4>
 
-            <span id="current-pokemon-description">{description}</span>
+            <span className={css({ color: '#8F9396' })}>{description}</span>
 
             {/*INFO: <!--height and weight--> */}
 
-            <div className="row center">
-              <div className="width-100 column center margin-5">
-                <h4 className={css({ fontWeight: 'bold' })}>Height</h4>
-                <div
-                  id="current-pokemon-height"
-                  className="pokemon-info-variable-container"
-                >
+            <Center>
+              <div className={abilityWH}>
+                <h4 className={h4}>Height</h4>
+                <div className={abilityWHbackground}>
                   {data[0].height / 10} m
                 </div>
               </div>
-              <div className="width-100 column center margin-5">
-                <h4 className={css({ fontWeight: 'bold' })}>Weight</h4>
-                <div
-                  id="current-pokemon-weight"
-                  className="pokemon-info-variable-container"
-                >
+              <div className={abilityWH}>
+                <h4 className={h4}>Weight</h4>
+                <div className={abilityWHbackground}>
                   {data[0].weight / 10} kg
                 </div>
               </div>
-            </div>
+            </Center>
 
             {/*INFO: <!--abilities--> */}
-
-            <div className="column">
-              <h4 className={css({ fontWeight: 'bold' })}>Abilities</h4>
-              <div className="row">
-                <div
-                  id="current-pokemon-abilitiy-0"
-                  className="pokemon-info-variable-container"
-                >
+            <Center className={css({ flexDirection: 'column' })}>
+              <h4 className={h4}>Abilities</h4>
+              <div
+                className={css({
+                  display: 'flex',
+                  w: '100%',
+                  m: '5px',
+                })}
+              >
+                <div className={abilityWHbackground}>
                   {dressUpPayloadValue(data[0].abilities[0].ability.name)}
                 </div>
                 {data[0].abilities[1] && (
-                  <div
-                    id="current-pokemon-abilitiy-1"
-                    className="pokemon-info-variable-container"
-                  >
+                  <div className={abilityWHbackground}>
                     {dressUpPayloadValue(data[0].abilities[1].ability.name)}
                   </div>
                 )}
               </div>
-            </div>
+            </Center>
 
             {/*INFO: <!--stats--> */}
 
-            <h4 className={css({ fontWeight: 'bold' })}>Stats</h4>
-            <div
-              className={css({
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              })}
-            >
+            <h4 className={h4}>Stats</h4>
+            <Center>
               {data[0].stats.map((current: Stats, i: number) => {
-                const colorStatStyle = {
-                  background: colorStat[current.stat.name],
-                };
-
                 switch (current.stat.name) {
                   case 'hp':
                     current.stat.name = 'HP';
@@ -338,6 +359,9 @@ function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
                     current.stat.name = 'SPD';
                     break;
                 }
+                const colorStatStyle = {
+                  background: colorStat[current.stat.name],
+                };
 
                 return (
                   <div
@@ -407,22 +431,16 @@ function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
                     data[0].stats[5].base_stat}
                 </h5>
               </div>
-            </div>
+            </Center>
 
             {/*INFO: <!--Evolution chain--> */}
 
             {data[2].chain.evolves_to.length !== 0 && (
-              <div>
-                <h4 className={css({ fontWeight: 'bold' })}>Evolution</h4>
-                <div
-                  className={css({
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  })}
-                >
+              <Center className={css({ flexDirection: 'column', w: '100%' })}>
+                <h4 className={h4}>Evolution</h4>
+                <Center className={css({ flexDirection: 'row', w: '100%' })}>
                   <img
-                    className={imageEvolutionStyle}
+                    className={currentPokemonEvolutionImage}
                     src={
                       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
                       getId(data[2].chain.species.url) +
@@ -432,9 +450,22 @@ function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
                       getId(data[2].chain.species.url),
                     )}
                   />
-                  <div>Lv. 16</div>
+                  {data[2].chain.evolves_to[0].evolution_details[0]
+                    .min_level ? (
+                    <div className={currentPokemonEvolutionLevelContainer}>
+                      Lv.{' '}
+                      {
+                        data[2].chain.evolves_to[0].evolution_details[0]
+                          .min_level
+                      }
+                    </div>
+                  ) : (
+                    <div className={currentPokemonEvolutionLevelContainer}>
+                      ?
+                    </div>
+                  )}
                   <img
-                    className={imageEvolutionStyle}
+                    className={currentPokemonEvolutionImage}
                     src={
                       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
                       getId(data[2].chain.evolves_to[0].species.url) +
@@ -446,9 +477,22 @@ function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
                   />
                   {data[2].chain.evolves_to[0].evolves_to[0] && (
                     <>
-                      <div>Lv. 36</div>
+                      {data[2].chain.evolves_to[0].evolves_to[0]
+                        .evolution_details[0].min_level ? (
+                        <div className={currentPokemonEvolutionLevelContainer}>
+                          Lv.{' '}
+                          {
+                            data[2].chain.evolves_to[0].evolves_to[0]
+                              .evolution_details[0].min_level
+                          }
+                        </div>
+                      ) : (
+                        <div className={currentPokemonEvolutionLevelContainer}>
+                          ?
+                        </div>
+                      )}
                       <img
-                        className={imageEvolutionStyle}
+                        className={currentPokemonEvolutionImage}
                         src={
                           'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
                           getId(
@@ -466,8 +510,8 @@ function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
                       />
                     </>
                   )}
-                </div>
-              </div>
+                </Center>
+              </Center>
             )}
           </div>
         </div>
@@ -476,4 +520,4 @@ function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
   );
 }
 
-export default PokemonContainer;
+export default PokemonInfo;
