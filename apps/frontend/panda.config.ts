@@ -21,6 +21,10 @@ export default defineConfig({
         '2xl': '1536px',
       },
       keyframes: {
+        rotatePokeBall: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
         loadingOut: {
           '0%': { top: '0' },
           '100%': { top: '-100vh' },

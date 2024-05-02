@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { css } from '../../styled-system/css';
+import { css, cx } from '../../styled-system/css';
 import { dressUpPayloadValue, getId, getPokemonInfo } from '../apis/setup.ts';
 import noPokemonSelected from '../assets/no-pokemon-selected-image.png';
 import {
@@ -13,6 +13,15 @@ import {
 function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
   const [selectedPokemon, setSelectedPokemon] = useState<number | null>(null);
 
+  const { data, isLoading, isSuccess } = useQuery({
+    queryKey: ['selectedPokemon', selectedPokemon],
+    queryFn: () =>
+      selectedPokemon !== null
+        ? getPokemonInfo(selectedPokemon)
+        : Promise.resolve(null),
+    enabled: !!selectedPokemon,
+  });
+
   useEffect(() => {
     setSelectedPokemon(pokemonInfo);
   }, [pokemonInfo]);
@@ -22,15 +31,6 @@ function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
       setSelectedPokemon(id);
     };
   };
-
-  const { data } = useQuery({
-    queryKey: ['selectedPokemon', selectedPokemon],
-    queryFn: () =>
-      selectedPokemon !== null
-        ? getPokemonInfo(selectedPokemon)
-        : Promise.resolve(null),
-    enabled: !!selectedPokemon,
-  });
 
   let description = '';
   if (data && selectedPokemon) {
@@ -89,63 +89,79 @@ function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
     maxH: '22vh',
   });
 
+  const allDiv = css({
+    display: 'flex',
+    hideBelow: 'lg',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // flexDirection: 'column',
+    w: '350px',
+    h: '82vh',
+    m: '10px',
+    position: 'fixed',
+    right: 'calc(10vw - 20px)',
+    p: '0 15px',
+    textAlign: 'center',
+    bottom: '0',
+    marginBottom: '0',
+    borderBottomLeftRadius: '0',
+    borderBottomRightRadius: '0',
+    // zIndex: '2',
+    // left: '50%',
+    // transform: 'translateX(-50%)',
+    rounded: '20px',
+    boxShadow: '#ededed 0 10px 10px',
+    backgroundColor: 'white',
+    zIndex: '2',
+  });
+
+  const slideOut = css({
+    animation: 'slideOut ease-in-out 0.35s forwards',
+  });
+
+  const loadingOut = cx(allDiv, isLoading ? slideOut : '');
+
+  const slideIn = css({
+    animation: 'slideIn ease-in-out 0.35s forwards',
+  });
+
+  const loadingIn = cx(allDiv, isSuccess ? slideIn : '');
+
   return (
-    <div
-      className={css({
-        display: 'flex',
-        hideBelow: 'lg',
-        justifyContent: 'center',
-        alignItems: 'center',
-        // flexDirection: 'column',
-        w: '350px',
-        h: '82vh',
-        m: '10px',
-        position: 'fixed',
-        right: 'calc(10vw - 20px)',
-        p: '0 15px',
-        textAlign: 'center',
-        bottom: '0',
-        marginBottom: '0',
-        borderBottomLeftRadius: '0',
-        borderBottomRightRadius: '0',
-        // zIndex: '2',
-        // left: '50%',
-        // transform: 'translateX(-50%)',
-        rounded: '20px',
-        boxShadow: '#ededed 0 10px 10px',
-        backgroundColor: 'white',
-      })}
-    >
-      {!selectedPokemon && (
-        <>
-          <img
-            className={css({
-              position: 'absolute',
-              right: '0',
-              left: '0',
-              bottom: '77vh',
-              marginRight: 'auto',
-              marginLeft: 'auto',
-              objectFit: 'contain',
-              imageRendering: 'pixelated',
-              maxWidth: '350px',
-              maxHeight: '22vh',
-            })}
-            src={noPokemonSelected}
-          />
-          <span
-            className={css({ fontSize: '18px !important', color: '#8f9396' })}
-          >
-            Select a Pokemon
-            <br />
-            to display here.
-          </span>
-        </>
+    <>
+      {!isSuccess && (
+        <div className={loadingOut}>
+          <div>
+            <img
+              className={css({
+                position: 'absolute',
+                right: '0',
+                left: '0',
+                bottom: '77vh',
+                marginRight: 'auto',
+                marginLeft: 'auto',
+                objectFit: 'contain',
+                imageRendering: 'pixelated',
+                maxWidth: '350px',
+                maxHeight: '22vh',
+              })}
+              src={noPokemonSelected}
+            />
+            <span
+              className={css({ fontSize: '18px !important', color: '#8f9396' })}
+            >
+              Select a Pokemon
+              <br />
+              to display here.
+            </span>
+          </div>
+        </div>
       )}
 
       {/* INFO: */}
-      {selectedPokemon && data && (
-        <>
+
+      {selectedPokemon && data && !isLoading && isSuccess && (
+        <div className={loadingIn}>
           {selectedPokemon >= 650 ? (
             <img
               className={containerImage}
@@ -454,9 +470,9 @@ function PokemonContainer({ pokemonInfo }: PokemonContainerProps) {
               </div>
             )}
           </div>
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 }
 
