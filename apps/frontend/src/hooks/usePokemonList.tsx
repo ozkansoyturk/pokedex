@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { getAllPokemon, getAllTypes } from '../apis/setup.ts';
 import { Pokemon } from '../types/pokemon.ts';
 
+// https://github.com/davidhckh/pokedex
+
 export function usePokemonList() {
   const [allPokemons, setAllpokemons] = useState<Pokemon[]>([]);
   const [loop, setLoop] = useState(true);
