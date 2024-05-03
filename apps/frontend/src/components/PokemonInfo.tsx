@@ -14,6 +14,7 @@ import {
 
 function PokemonInfo({ pokemonInfo }: PokemonContainerProps) {
   const [selectedPokemon, setSelectedPokemon] = useState<number | null>(null);
+  const [pokemonInfoOpen, setPokemonInfoOpen] = useState<boolean>(false);
 
   const { data, isLoading, isSuccess } = useQuery({
     queryKey: ['selectedPokemon', selectedPokemon],
@@ -26,6 +27,7 @@ function PokemonInfo({ pokemonInfo }: PokemonContainerProps) {
 
   useEffect(() => {
     setSelectedPokemon(pokemonInfo);
+    setPokemonInfoOpen(false);
   }, [pokemonInfo]);
 
   const handlePokemonClick = (id: number) => {
@@ -34,7 +36,9 @@ function PokemonInfo({ pokemonInfo }: PokemonContainerProps) {
     };
   };
 
-  const handleClosePokemon = () => {};
+  const handleClosePokemon = () => {
+    setPokemonInfoOpen(true);
+  };
 
   let description = '';
   if (data && selectedPokemon) {
@@ -151,7 +155,10 @@ function PokemonInfo({ pokemonInfo }: PokemonContainerProps) {
     },
   });
 
-  const loadingIn = cx(allDiv, isSuccess ? slideIn : '');
+  const loadingIn = cx(
+    allDiv,
+    pokemonInfoOpen ? slideOut : selectedPokemon ? slideIn : '',
+  );
 
   const abilityWH = css({
     display: 'flex',
@@ -227,42 +234,46 @@ function PokemonInfo({ pokemonInfo }: PokemonContainerProps) {
 
       {selectedPokemon && data && !isLoading && isSuccess && (
         <>
-          <div
-            className={css({
-              hideFrom: 'lg',
-              xsToLg: {
-                w: '100vw',
-                h: '100vh',
-                position: 'fixed',
-                zIndex: '2',
-                transition: '0.35s',
-              },
-            })}
-            style={{
-              backgroundColor: typeColors[data[0].types[0].type.name],
-            }}
-          ></div>
-          <div
-            className={css({
-              hideFrom: 'lg',
-              xsToLg: {
-                display: 'unset',
-                position: 'fixed',
-                top: '10px',
-                right: '10px',
-                zIndex: '2',
-                cursor: 'pointer',
-                bgColor: '#F6F8FC',
-                p: '10px',
-                rounded: '10px',
-                h: '42px',
-                transition: '0.35s',
-              },
-            })}
-            onClick={handleClosePokemon}
-          >
-            <img src={closePokemonInfo} />
-          </div>
+          {!pokemonInfoOpen && (
+            <>
+              <div
+                className={css({
+                  hideFrom: 'lg',
+                  xsToLg: {
+                    w: '100vw',
+                    h: '100vh',
+                    position: 'fixed',
+                    zIndex: '2',
+                    transition: '0.35s',
+                  },
+                })}
+                style={{
+                  backgroundColor: typeColors[data[0].types[0].type.name],
+                }}
+              ></div>
+              <div
+                className={css({
+                  hideFrom: 'lg',
+                  xsToLg: {
+                    display: 'unset',
+                    position: 'fixed',
+                    top: '10px',
+                    right: '10px',
+                    zIndex: '2',
+                    cursor: 'pointer',
+                    bgColor: '#F6F8FC',
+                    p: '10px',
+                    rounded: '10px',
+                    h: '42px',
+                    transition: '0.35s',
+                  },
+                })}
+                onClick={handleClosePokemon}
+              >
+                <img src={closePokemonInfo} />
+              </div>
+            </>
+          )}
 
           <div className={loadingIn}>
             {selectedPokemon >= 650 ? (

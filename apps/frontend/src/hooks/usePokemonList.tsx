@@ -22,7 +22,7 @@ export function usePokemonList() {
   });
 
   useEffect(() => {
-    if (allPokemons.length || !data || !dataType) return;
+    if (!data || !dataType) return;
     const pokemons: Pokemon[] = [];
 
     if (!isLoading && !isError) {
@@ -58,24 +58,15 @@ export function usePokemonList() {
           }
         }
       }
+      setAllpokemons(pokemons);
     }
-
-    setAllpokemons(pokemons);
 
     const timer = setTimeout(() => {
       setLoop(false);
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [
-    data,
-    isLoading,
-    isError,
-    dataType,
-    TypeisLoading,
-    TypeisError,
-    allPokemons,
-  ]);
+  }, [data, isLoading, isError, dataType, TypeisLoading, TypeisError]);
 
   return { allPokemons, loop };
 }
