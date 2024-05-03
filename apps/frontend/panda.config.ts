@@ -14,11 +14,13 @@ export default defineConfig({
   theme: {
     extend: {
       breakpoints: {
+        xs: '100px',
         sm: '640px',
         md: '768px',
         lg: '1100px',
         xl: '1280px',
         '2xl': '1536px',
+        '3xl': '4536px',
       },
       keyframes: {
         rotatePokeBall: {
@@ -36,6 +38,14 @@ export default defineConfig({
         slideOut: {
           '0%': { right: 'calc(10vw - 20px)' },
           '100%': { right: '-400px' },
+        },
+        slideInResponsive: {
+          '0%': { bottom: '-100vh' },
+          '100%': { bottom: '0' },
+        },
+        slideOutResponsive: {
+          '0%': { bottom: '0' },
+          '100%': { bottom: '-100vh' },
         },
       },
     },
