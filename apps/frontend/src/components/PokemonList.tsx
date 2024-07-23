@@ -32,7 +32,11 @@ const typeColors: { [key: string]: string } = {
 function PokemonList({ allPokemons }: pokemonListsProps) {
   const [maxIndex, setMaxIndex] = useState(30);
   const [search, setSearch] = useState('');
-  const [pokemonInfo, setPokemonInfo] = useState<number | null>(null);
+  const [currentPokemon, setCurrentPokemon] = useState<number | null>(null);
+
+  const handleChildUpdate = (newCurrentPokemon: number | null) => {
+    setCurrentPokemon(newCurrentPokemon);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,9 +74,11 @@ function PokemonList({ allPokemons }: pokemonListsProps) {
       alignItems: 'center',
       flexDirection: 'column',
       flex: '0.5',
-      minW: '23%',
+      minW: '56',
+      xsToSm: { minW: '80' },
       m: '10px',
       mt: '60px',
+      p: '15px',
       pt: '40px',
       position: 'relative',
       cursor: 'pointer',
@@ -80,7 +86,6 @@ function PokemonList({ allPokemons }: pokemonListsProps) {
       border: '2px solid white',
       rounded: '3xl',
       boxShadow: '#ededed 0 10px 10px',
-      p: '15px',
       backgroundColor: 'white',
       _hover: {
         border: '2px solid #e0e0e0',
@@ -137,8 +142,9 @@ function PokemonList({ allPokemons }: pokemonListsProps) {
         <div
           className={css({
             display: 'flex',
-            flexFlow: 'wrap row',
+            flexWrap: 'wrap',
             justifyContent: 'center',
+            w: '100%',
           })}
         >
           {allPokemons
@@ -151,7 +157,7 @@ function PokemonList({ allPokemons }: pokemonListsProps) {
             .map((value: Pokemon) => {
               return (
                 <div
-                  onClick={() => setPokemonInfo(value.id)}
+                  onClick={() => setCurrentPokemon(value.id)}
                   key={value.id}
                   className={concatPokemonDiv}
                 >
@@ -218,7 +224,10 @@ function PokemonList({ allPokemons }: pokemonListsProps) {
             })}
         </div>
       </div>
-      <PokemonInfo pokemonInfo={pokemonInfo} />
+      <PokemonInfo
+        pokemonInfo={currentPokemon}
+        handleChildUpdate={handleChildUpdate}
+      />
     </>
   );
 }

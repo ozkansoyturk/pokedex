@@ -12,7 +12,10 @@ import {
   Stats,
 } from '../types/pokemon.ts';
 
-function PokemonInfo({ pokemonInfo }: PokemonContainerProps) {
+function PokemonInfo({
+  pokemonInfo,
+  handleChildUpdate,
+}: PokemonContainerProps) {
   const [selectedPokemon, setSelectedPokemon] = useState<number | null>(null);
   const [pokemonInfoOpen, setPokemonInfoOpen] = useState<boolean>(false);
 
@@ -38,6 +41,9 @@ function PokemonInfo({ pokemonInfo }: PokemonContainerProps) {
 
   const handleClosePokemon = () => {
     setPokemonInfoOpen(true);
+    setTimeout(() => {
+      handleChildUpdate(null);
+    }, 200);
   };
 
   let description = '';

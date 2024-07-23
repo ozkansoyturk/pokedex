@@ -7,6 +7,7 @@ export type Pokemon = {
 
 export type PokemonContainerProps = {
   pokemonInfo: number | null;
+  handleChildUpdate: (pokemonInfo: number | null) => void;
 };
 
 export type Description = {
